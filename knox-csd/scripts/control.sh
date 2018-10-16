@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 export GATEWAY_HOME="${CONF_DIR}"
+export GATEWAY_LOG_OPTS="-Dlog4j.configuration=${CONF_DIR}/log4j.properties"
 
 echo ""
 echo "Date: `date`"

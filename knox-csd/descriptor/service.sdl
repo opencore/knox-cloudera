@@ -149,17 +149,13 @@
             "excludeParams": ["data_dir", "master_secret"]
           }
         ]
+      },
+      "logging": {
+        "dir": "/var/log/knox",
+        "filename": "gateway.log",
+        "modifiable": true,
+        "loggingType": "log4j"
       }
-    }
-  ],
-  "commands": [
-    {
-      "name": "persist_master_secret",
-      "label": "Persist Master secret",
-      "description": "Persist Master secret",
-      "roleCommand": "echo 'foobar'",
-      "roleName": "KNOX_GATEWAY",
-      "runMode": "all"
     }
   ]
 }
