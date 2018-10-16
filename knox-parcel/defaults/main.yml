@@ -1,0 +1,23 @@
+---
+DOWNLOAD_URL: "https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename={{ PROJECT_NAME }}/{{ DOWNLOAD_PATH }}"
+
+# Directory names to use relative to playbook dir
+OUTPUT_DIRECTORY_NAME: output
+WORK_DIRECTORY_NAME: work-{{ PROJECT_VERSION }}
+CACHE_DIRECTORY_NAME: _cache
+
+# Absolute paths generated from evaluating current directory and directory names defined above
+BASE_DIR: "{{ lookup('env','PWD') }}/work"
+WORK_DIR: "{{ BASE_DIR | regex_replace('\\/$', '') }}/{{ WORK_DIRECTORY_NAME | regex_replace('\\/$', '') }}"
+OUTPUT_DIR: "{{ BASE_DIR }}/{{ OUTPUT_DIRECTORY_NAME | regex_replace('\\/$', '') }}"
+CACHE_DIR: "{{ BASE_DIR }}/{{ CACHE_DIRECTORY_NAME }}"
+
+TARGET_ARCHITECTURES:
+  - el6
+  - el7
+  - sles12
+  - xenial
+
+PROJECT_NAME_LOWER: "{{ PROJECT_NAME | lower }}"
+PROJECT_NAME_UPPER: "{{ PROJECT_NAME | upper }}"
+PARCEL_PREFIX: "{{ PROJECT_NAME_UPPER }}-{{ PROJECT_VERSION }}-{{ PARCEL_VERSION }}"

@@ -1,0 +1,84 @@
+---
+- name: Empty working directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ WORK_DIR }}"
+    - "{{ OUTPUT_DIR }}"
+
+- name: Create output directory
+  file:
+    state: directory
+    path: "{{ item }}"
+  with_items:
+    - "{{ BASE_DIR }}"
+    - "{{ OUTPUT_DIR }}"
+    - "{{ WORK_DIR }}"
+    - "{{ CACHE_DIR }}"
+
+- name: Download distribution
+  get_url:
+    url: "{{ DOWNLOAD_URL }}"
+    dest: "{{ CACHE_DIR }}/{{ DOWNLOAD_FILE_NAME }}"
+    mode: 0644
+
+- name: Extract distribution
+  unarchive:
+    src: "{{ CACHE_DIR }}/{{ DOWNLOAD_FILE_NAME }}"
+    dest: "{{ WORK_DIR }}"
+    copy: no
+
+- name: Rename directory to match parcel prefix
+  command: "mv {{ WORK_DIR }}/{{ EXTRACTED_DIR_NAME }} {{ WORK_DIR }}/{{ PARCEL_PREFIX }}"
+
+- name: Create metadata directory
+  file:
+    path: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/meta/"
+    state: directory
+
+- name: Copy metadata
+  copy:
+    src: "{{ item }}"
+    dest: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/meta/{{ item }}"
+  with_items:
+    - "alternatives.json"
+    - "{{ PROJECT_NAME_LOWER }}-env.sh"
+
+- name: Copy CLI file
+  copy:
+    src: knoxcli
+    dest: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/bin/"
+    mode: 0755
+
+- name: Rename conf directory - this is a workaround so that Knox doesn't find a gateway-site.xml by default
+  command: "mv {{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf {{ WORK_DIR }}/{{ PARCEL_PREFIX }}.org"
+
+- name: Create empty conf directory
+  file:
+    path: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf"
+    state: directory
+
+- name: Create parcel.json
+  template:
+    src: "parcel.json.j2"
+    dest: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/meta/parcel.json"
+
+- name: Create parcel
+  archive:
+    path: "{{ WORK_DIR }}/"
+    dest: "{{ OUTPUT_DIR }}/{{ PARCEL_PREFIX }}-universal.parcel"
+
+- name: Symlink parcel to architecture specific parcels
+  file:
+    src: "{{ PARCEL_PREFIX }}-universal.parcel"
+    path: "{{ OUTPUT_DIR }}/{{ PARCEL_PREFIX }}-{{ item }}.parcel"
+    state: link
+  with_items: "{{ TARGET_ARCHITECTURES }}"
+
+- name: Empty working directory
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ WORK_DIR }}"

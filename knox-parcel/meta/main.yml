@@ -1,0 +1,12 @@
+galaxy_info:
+  author: Lars Francke
+  description: Role to create an Apache Knox Parcel
+  company: OpenCore
+
+  license: Apache
+
+  min_ansible_version: 1.2
+
+  galaxy_tags: []
+
+dependencies: []

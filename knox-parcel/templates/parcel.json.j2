@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "name": "{{ PROJECT_NAME_UPPER }}",
+  "version": "{{ PROJECT_VERSION }}-{{ PARCEL_VERSION }}",
+  "setActiveSymlink": true,
+
+  "provides": [
+    "{{ PROJECT_NAME_LOWER }}"
+  ],
+
+  "scripts": {
+    "defines": "{{ PROJECT_NAME_LOWER }}-env.sh"
+  },
+
+  "packages": [],
+
+  "components": [
+    { "name"       : "{{ PROJECT_NAME_LOWER }}",
+      "version"    : "{{ PROJECT_VERSION }}"
+    }
+  ],
+
+  "users": {
+    "{{ PROJECT_NAME | lower }}": {
+      "longname"    : "{{ PROJECT_NAME }}",
+      "home"        : "/var/lib/{{ PROJECT_NAME_LOWER }}",
+      "shell"       : "/sbin/nologin",
+      "extra_groups": []
+    }
+  },
+
+  "groups": []
+}

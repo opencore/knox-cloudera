@@ -1,0 +1,8 @@
+{
+  "knoxcli": {
+    "destination": "/usr/bin/knoxcli",
+    "source": "bin/knoxcli",
+    "priority": 10,
+    "isDirectory": false
+  }
+}

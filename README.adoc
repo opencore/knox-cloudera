@@ -1,0 +1,47 @@
+= Apache Knox Parcel & CSD
+
+This repository contains an Ansible playbook to create a Parcel for Apache Knox as well as the definitions needed to build a CSD.
+Both these things are needed if you want to integrate Knox into Cloudera Manager.
+
+== Parcel
+
+To build the Parcel execute the `parcel.yml` playbook from the main directory.
+There is a script called `build-parcel.sh` that can be used to kick off the process.
+The finished parcel will be in the `work/output` directory.
+Cloudera Manager requires one Parcel per supported target distribution.
+We only create a single physical file (with the suffix `-universal`) and symlink the others.
+
+Note: This does not include the call to `make_manifest.py` which is needed to create the `manifest.json` file.
+
+We (http://www.opencore.com[OpenCore]) do not currently host a repository with pre-built Parcels but we might do so in the future.
+
+
+== CSD
+
+There is also a CSD to be able to manage Knox from within Cloudera Manager.
+This is currently _unfinished_.
+It will start Knox but it will not work or do anything useful yet.
+
+There are some problems with how Knox processes environment variables and Java system properties, some of which I've https://lists.apache.org/thread.html/44d3a2dd8a6fb40baa0120acc88c9244404653706974fb422cb7d546@%3Cdev.knox.apache.org%3E[outlined] on the Knox dev mailing list.
+
+
+== Implementation notes
+
+=== Changing the path where Knox looks for gateway-log4j.properties
+
+=== Changing the path where Knox looks for the gateway-site.xml file
+
+Knox looks for `gateway-site.xml` in these locations in this order:
+
+1) Java System Property `GATEWAY_HOME/conf/gateway-site.xml`
+2) Environment variable `GATEWAY_HOME/conf/gateway-site.xml`
+3) Java System Property `user.dir/conf/gateway-site.xml`
+4) Classpath `conf/gateway-site.xml`
+
+So the path `conf` is hardcoded.
+
+Unfortunately the launcher has an embedded cfg file that contains a hardcoded `GATEWAY_HOME` property which the `Invoker` class then propagates to a Java System property.
+The only way to have the environment variable take effect is by removing the default `conf/gateway-site.xml` file from the Knox distribution.
+The directory `conf` needs to stay though because `gateway.sh` checks for its existence.
+The path is hardcoded in the script and cannot be changed even though its pointing to the wrong location.
+Solution is to create an empty `conf` directory or to patch the `gateway.sh` file.
