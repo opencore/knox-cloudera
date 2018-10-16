@@ -33,12 +33,12 @@ There are some problems with how Knox processes environment variables and Java s
 
 Knox looks for `gateway-site.xml` in these locations in this order:
 
-1) Java System Property `GATEWAY_HOME/conf/gateway-site.xml`
-2) Environment variable `GATEWAY_HOME/conf/gateway-site.xml`
-3) Java System Property `user.dir/conf/gateway-site.xml`
-4) Classpath `conf/gateway-site.xml`
+1. Java System Property `GATEWAY_HOME/conf/gateway-site.xml`
+2. Environment variable `GATEWAY_HOME/conf/gateway-site.xml`
+3. Java System Property `user.dir/conf/gateway-site.xml`
+4. Classpath `conf/gateway-site.xml`
 
-So the path `conf` is hardcoded.
+The path part `conf` is hardcoded.
 
 Unfortunately the launcher has an embedded cfg file that contains a hardcoded `GATEWAY_HOME` property which the `Invoker` class then propagates to a Java System property.
 The only way to have the environment variable take effect is by removing the default `conf/gateway-site.xml` file from the Knox distribution.
