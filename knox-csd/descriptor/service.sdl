@@ -18,9 +18,19 @@
   ],
   "parameters": [
     {
+      "name": "conf_dir",
+      "label": "Configuration directory",
+      "description": "Contains configuration files that apply to the gateway globally (i.e. not cluster specific ).",
+      "type": "path",
+      "pathType": "localDataDir",
+      "mode": "0750",
+      "default": "/var/lib/knox/conf",
+      "configurableInWizard": true
+    },
+    {
       "name": "data_dir",
-      "label": "Knox Default Data directory",
-      "description": "TODO",
+      "label": "Data directory",
+      "description": "Contains security and topology specific artifacts.",
       "type": "path",
       "pathType": "localDataDir",
       "mode": "0750",
@@ -30,12 +40,11 @@
     {
       "name": "master_secret",
       "label": "Knox Master secret",
-      "description": "TODO",
+      "description": "DO NOT CHANGE THIS UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING!",
       "type": "password",
       "required": true,
       "configurableInWizard": true
     },
-
     {
       "name": "gateway_port",
       "label": "Gateway HTTP port",
@@ -119,6 +128,31 @@
       "default": "admin"
     }
   ],
+  "serviceInit": {
+    "preStartSteps": [
+      { "commandName": "CreateConfigDirectory" },
+      { "commandName": "CreateMasterSecret" }
+    ]
+  },
+  "commands": [
+    {
+      "name": "CreateConfigDirectory",
+      "label": "Bootstrap Configuration directory",
+      "description": "Copies over an empty configuration directory",
+      "roleName": "KNOX_GATEWAY",
+      "roleCommand": "GatewayCreateConfigDirectory",
+      "runMode": "all"
+    },
+    {
+      "name": "CreateMasterSecret",
+      "label": "Create master secret",
+      "description": "Runs knoxcli.sh create-master",
+      "roleName": "KNOX_GATEWAY",
+      "roleCommand": "GatewayCreateMasterSecret",
+      "runMode": "all"
+    }
+
+  ],
   "roles": [
     {
       "name": "KNOX_GATEWAY",
@@ -128,14 +162,15 @@
       "externalLink": {
         "name": "Knox Admin UI",
         "label": "Knox Admin UI",
-        "url": "https://${host}:8443/"
+        "url": "https://${host}:8443/gateway/manager/admin-ui"
       },
       "startRunner": {
         "program": "scripts/control.sh",
         "args": ["${master_secret}"],
         "environmentVariables": {
           "GATEWAY_SERVER_RUN_IN_FOREGROUND": "true",
-          "GATEWAY_DATA_HOME": "${data_dir}"
+          "GATEWAY_DATA_HOME": "${data_dir}",
+          "GATEWAY_CONF_HOME": "${conf_dir}"
         }
       },
       "stopRunner": {
@@ -155,7 +190,35 @@
         "filename": "gateway.log",
         "modifiable": true,
         "loggingType": "log4j"
-      }
+      },
+      "commands": [
+        {
+          "name": "GatewayCreateConfigDirectory",
+          "label": "Bootstrap Configuration directory",
+          "description": "Copies over an empty configuration directory",
+          "expectedExitCodes": [0],
+          "requiredRoleState": "stopped",
+          "commandRunner": {
+            "program": "scripts/bootstrap_config.sh",
+            "args": ["${conf_dir}"]
+          }
+        },
+        {
+          "name": "GatewayCreateMasterSecret",
+          "label": "Create Master secret",
+          "description": "Creates master secret",
+          "expectedExitCodes": [0],
+          "requiredRoleState": "stopped",
+          "commandRunner": {
+            "program": "scripts/create_master.sh",
+            "args": ["${master_secret}"],
+            "environmentVariables": {
+              "GATEWAY_DATA_HOME": "${data_dir}"
+            }
+          }
+        }
+
+      ]
     }
   ]
 }
