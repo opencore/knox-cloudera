@@ -51,6 +51,12 @@
     dest: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/bin/"
     mode: 0755
 
+- name: Copy modified gateway.sh script
+  copy:
+    src: gateway.sh
+    dest: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/bin/"
+    mode: 0755
+
 - name: Rename conf directory - this is a workaround so that Knox doesn't find a gateway-site.xml by default
   command: "mv {{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf {{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf.org"
 
