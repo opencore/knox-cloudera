@@ -60,6 +60,12 @@
 - name: Rename conf directory - this is a workaround so that Knox doesn't find a gateway-site.xml by default
   command: "mv {{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf {{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf.org"
 
+- name: Original conf directory and its subdirectories need proper permissions
+  file:
+    path: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf.org"
+    mode: u=rwX,g=rX,o=rX
+    recurse: yes
+
 - name: Create empty conf directory
   file:
     path: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf"
