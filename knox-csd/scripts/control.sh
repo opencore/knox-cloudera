@@ -32,7 +32,7 @@ com.sun.security.jgss.initiate {
   doNotPrompt=true
   useKeyTab=true
   keyTab=\"$KEYTAB_FILE\"
-  principal="$KNOX_PRINCIPAL"
+  principal=\"$KNOX_PRINCIPAL\"
   isInitiator=true
   storeKey=true
   useTicketCache=true
