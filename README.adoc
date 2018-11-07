@@ -5,7 +5,7 @@ Both these things are needed if you want to integrate Knox into Cloudera Manager
 
 == Parcel
 
-To build the Parcel execute the `parcel.yml` playbook from the main directory.
+To build the Parcel execute the `parcel.yml` playbook from the main directory using Ansible.
 There is a script called `build-parcel.sh` that can be used to kick off the process.
 The finished parcel will be in the `work/output` directory.
 Cloudera Manager requires one Parcel per supported target distribution.
@@ -19,8 +19,12 @@ We (http://www.opencore.com[OpenCore]) do not currently host a repository with p
 == CSD
 
 There is also a CSD to be able to manage Knox from within Cloudera Manager.
-This is currently _unfinished_.
-It will start Knox but it will not work or do anything useful yet.
+It will start Knox but it will run with its default configuration.
+
+To configure Knox you'll need to _manually_ change the topologies etc. in the data directory itself.
+The https://knox.apache.org/books/knox-1-1-0/user-guide.html[Knox User Guide] can help.
+
+You will also need to manually create Proxy Users in the various services that Knox should access.
 
 There are some problems with how Knox processes environment variables and Java system properties, some of which I've https://lists.apache.org/thread.html/44d3a2dd8a6fb40baa0120acc88c9244404653706974fb422cb7d546@%3Cdev.knox.apache.org%3E[outlined] on the Knox dev mailing list.
 
