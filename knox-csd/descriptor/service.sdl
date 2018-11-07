@@ -93,7 +93,7 @@
           {
             "filename": "conf/gateway-site.xml",
             "configFormat": "hadoop_xml",
-            "excludeParams": ["data_dir", "master_secret"],
+            "excludedParams": ["conf_dir", "gateway_java_opts", "data_dir", "master_secret"],
             "additionalConfigs": [
               {
                 "key": "java.security.auth.login.config",
