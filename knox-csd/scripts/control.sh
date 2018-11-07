@@ -2,6 +2,7 @@
 
 export GATEWAY_HOME="${CONF_DIR}"
 export GATEWAY_LOG_OPTS="-Dlog4j.configuration=${CONF_DIR}/log4j.properties"
+export GATEWAY_JAVA_OPTS="${CSD_JAVA_OPTS}"
 
 echo ""
 echo "Date: `date`"
@@ -12,6 +13,7 @@ echo "GATEWAY_HOME: $GATEWAY_HOME"
 echo "GATEWAY_DATA_HOME: $GATEWAY_DATA_HOME"
 echo "GATEWAY_CONF_HOME: $GATEWAY_CONF_HOME"
 echo "KNOX_PRINCIPAL: $KNOX_PRINCIPAL"
+echo "CSD_JAVA_OPTS: $CSD_JAVA_OPTS"
 echo ""
 
 # Generate JAAS config file
