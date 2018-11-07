@@ -109,7 +109,7 @@ function appStart {
    checkEnv
 
    if [ "$GATEWAY_SERVER_RUN_IN_FOREGROUND" == true ]; then
-      exec $JAVA $APP_JAVA_LIB_PATH $APP_MEM_OPTS $APP_DBG_OPTS $GATEWAY_LOG_OPTS -jar $APP_JAR
+      exec $JAVA $APP_JAVA_LIB_PATH $APP_MEM_OPTS $APP_DBG_OPTS $GATEWAY_LOG_OPTS $GATEWAY_JAVA_OPTS -jar $APP_JAR
    else
       getPID
       if [ "$?" -eq "0" ]; then
