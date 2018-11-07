@@ -18,7 +18,7 @@ echo ""
 
 # Generate JAAS config file
 if [[ ${KERBEROS_AUTH_ENABLED} == "true" ]]; then
-  KEYTAB_FILE="$CONF_DIR/fknox.keytab"
+  KEYTAB_FILE="$CONF_DIR/knox.keytab"
   JAAS_FILE="$CONF_DIR/krb5JAASLogin.conf"
 
   sed -i "s|REPLACEME|$JAAS_FILE|g" "$CONF_DIR/conf/gateway-site.xml"
