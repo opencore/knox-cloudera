@@ -5,7 +5,8 @@
   "version": "1",
   "runAs": {
     "user": "knox",
-    "group": "knox"
+    "group": "knox",
+    "principal": "knox"
   },
   "icon": "images/knox.png",
   "parcel": {
@@ -16,6 +17,7 @@
   "rolesWithExternalLinks": [
     "KNOX_GATEWAY"
   ],
+  "kerberos": "${gateway_hadoop_kerberos_secured}",
   "parameters": [
     {
       "name": "conf_dir",
@@ -88,14 +90,6 @@
       "default": "/etc/krb5.conf"
     },
     {
-      "name": "java.security.auth.login.config",
-      "label": "TODO",
-      "description": "TODO",
-      "configName": "java.security.auth.login.config",
-      "type": "string",
-      "default": "TODO"
-    },
-    {
       "name": "sun_security_krb5_debug",
       "label": "KRB5 Debug",
       "description": "Boolean flag indicating whether to enable debug messages for krb5 authentication",
@@ -166,22 +160,40 @@
       },
       "startRunner": {
         "program": "scripts/control.sh",
-        "args": ["${master_secret}"],
         "environmentVariables": {
           "GATEWAY_SERVER_RUN_IN_FOREGROUND": "true",
           "GATEWAY_DATA_HOME": "${data_dir}",
-          "GATEWAY_CONF_HOME": "${conf_dir}"
+          "GATEWAY_CONF_HOME": "${conf_dir}",
+          "KERBEROS_AUTH_ENABLED": "${gateway_hadoop_kerberos_secured}"
         }
       },
       "stopRunner": {
         "timeout": 30000
       },
+      "kerberosPrincipals": [
+        {
+          "name": "KNOX_PRINCIPAL",
+          "primary": "${principal}",
+          "instance": "${host}"
+        },
+        {
+          "name": "KNOX_SPNEGO_PRINCIPAL",
+          "primary": "HTTP",
+          "instance": "${host}"
+        }
+      ],
       "configWriter": {
         "generators": [
           {
             "filename": "conf/gateway-site.xml",
             "configFormat": "hadoop_xml",
-            "excludeParams": ["data_dir", "master_secret"]
+            "excludeParams": ["data_dir", "master_secret"],
+            "additionalConfigs": [
+              {
+                "key": "java.security.auth.login.config",
+                "value": "REPLACEME"
+              }
+            ]
           }
         ]
       },

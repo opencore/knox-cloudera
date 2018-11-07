@@ -11,10 +11,29 @@ echo "KNOX_HOME: $KNOX_HOME"
 echo "GATEWAY_HOME: $GATEWAY_HOME"
 echo "GATEWAY_DATA_HOME: $GATEWAY_DATA_HOME"
 echo "GATEWAY_CONF_HOME: $GATEWAY_CONF_HOME"
+echo "KNOX_PRINCIPAL: $KNOX_PRINCIPAL"
 echo ""
 
-cd $KNOX_HOME
+# Generate JAAS config file
+if [[ ${KERBEROS_AUTH_ENABLED} == "true" ]]; then
+  KEYTAB_FILE="$CONF_DIR/fknox.keytab"
+  JAAS_FILE="$CONF_DIR/krb5JAASLogin.conf"
 
-# $KNOX_HOME/bin/knoxcli.sh create-master --master "$1"
+  sed -i "s|REPLACEME|$JAAS_FILE|g" "$CONF_DIR/conf/gateway-site.xml"
+  JAAS_CONFIG="
+com.sun.security.jgss.initiate {
+  com.sun.security.auth.module.Krb5LoginModule required
+  renewTGT=true
+  doNotPrompt=true
+  useKeyTab=true
+  keyTab=\"$KEYTAB_FILE\"
+  principal="$KNOX_PRINCIPAL"
+  isInitiator=true
+  storeKey=true
+  useTicketCache=true
+  client=true;
+};"
+  echo "$JAAS_CONFIG" > $JAAS_FILE
+fi
 
 exec $KNOX_HOME/bin/gateway.sh start
