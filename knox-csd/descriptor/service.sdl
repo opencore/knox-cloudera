@@ -20,113 +20,12 @@
   "kerberos": "${gateway_hadoop_kerberos_secured}",
   "parameters": [
     {
-      "name": "conf_dir",
-      "label": "Configuration directory",
-      "description": "Contains configuration files that apply to the gateway globally (i.e. not cluster specific ).",
-      "type": "path",
-      "pathType": "localDataDir",
-      "mode": "0750",
-      "default": "/var/lib/knox/conf",
-      "configurableInWizard": true
-    },
-    {
-      "name": "data_dir",
-      "label": "Data directory",
-      "description": "Contains security and topology specific artifacts.",
-      "type": "path",
-      "pathType": "localDataDir",
-      "mode": "0750",
-      "default": "/var/lib/knox/data",
-      "configurableInWizard": true
-    },
-    {
-      "name": "master_secret",
-      "label": "Knox Master secret",
-      "description": "DO NOT CHANGE THIS UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING!",
-      "type": "password",
-      "required": true,
-      "configurableInWizard": true
-    },
-    {
-      "name": "gateway_port",
-      "label": "Gateway HTTP port",
-      "description": "The HTTP port for the Gateway.",
-      "configName": "gateway.port",
-      "type": "port",
-      "required": true,
-      "default": 8443
-    },
-    {
-      "name": "gateway_path",
-      "label": "Gateway path",
-      "description": "The default context path for the gateway.",
-      "configName": "gateway.path",
-      "type": "string",
-      "required": true,
-      "default": "gateway"
-    },
-    {
-      "name": "gateway_gateway_conf_dir",
-      "label": "Gateway config directory",
-      "description": "The directory within GATEWAY_HOME that contains gateway topology files and deployments.",
-      "configName": "gateway.gateway.conf.dir",
-      "type": "string",
-      "default": "deployments"
-    },
-    {
       "name": "gateway_hadoop_kerberos_secured",
       "label": "Kerberos secured",
       "description": "Boolean flag indicating whether the Hadoop cluster protected by Gateway is secured with Kerberos",
       "configName": "gateway.hadoop.kerberos.secured",
       "type": "boolean",
       "default": "false"
-    },
-    {
-      "name": "java_security_krb5_conf",
-      "label": "krb5.conf location",
-      "description": "Absolute path to krb5.conf file",
-      "configName": "java.security.krb5.conf",
-      "type": "string",
-      "default": "/etc/krb5.conf"
-    },
-    {
-      "name": "sun_security_krb5_debug",
-      "label": "KRB5 Debug",
-      "description": "Boolean flag indicating whether to enable debug messages for krb5 authentication",
-      "configName": "sun.security.krb5.debug",
-      "type": "boolean",
-      "default": "true"
-    },
-    {
-      "name": "gateway_websocket_feature_enabled",
-      "label": "Websockets enabled",
-      "description": "Enable/Disable websocket feature.",
-      "configName": "gateway.websocket.feature.enabled",
-      "type": "boolean",
-      "default": "false"
-    },
-    {
-      "name": "gateway_scope_cookies_feature_enabled",
-      "label": "Cookie scoping enabled",
-      "description": "Enable/Disable cookie scoping feature.",
-      "configName": "gateway.scope.cookies.feature.enabled",
-      "type": "boolean",
-      "default": "false"
-    },
-    {
-      "name": "gateway_knox_admin_groups",
-      "label": "Admin Groups",
-      "configName": "gateway.knox.admin.groups",
-      "description": "Admin groups for Knox",
-      "type": "string",
-      "default": "admin"
-    },
-    {
-      "name": "gateway_java_opts",
-      "label": "Additional Gateway Java Options",
-      "description": "These arguments are passed as part of the Java command line. Commonly, garbage collection flags or extra debugging flags are passed here.",
-      "type": "string",
-      "default": ""
     }
   ],
   "serviceInit": {
@@ -152,7 +51,6 @@
       "roleCommand": "GatewayCreateMasterSecret",
       "runMode": "all"
     }
-
   ],
   "roles": [
     {
@@ -211,6 +109,109 @@
         "modifiable": true,
         "loggingType": "log4j"
       },
+      "parameters": [
+        {
+          "name": "conf_dir",
+          "label": "Configuration directory",
+          "description": "Contains configuration files that apply to the gateway globally (i.e. not cluster specific ).",
+          "type": "path",
+          "pathType": "localDataDir",
+          "mode": "0750",
+          "default": "/var/lib/knox/conf",
+          "configurableInWizard": true
+        },
+        {
+          "name": "data_dir",
+          "label": "Data directory",
+          "description": "Contains security and topology specific artifacts.",
+          "type": "path",
+          "pathType": "localDataDir",
+          "mode": "0750",
+          "default": "/var/lib/knox/data",
+          "configurableInWizard": true
+        },
+        {
+          "name": "master_secret",
+          "label": "Knox Master secret",
+          "description": "DO NOT CHANGE THIS UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING!",
+          "type": "password",
+          "required": true,
+          "configurableInWizard": true
+        },
+        {
+          "name": "gateway_port",
+          "label": "Gateway HTTP port",
+          "description": "The HTTP port for the Gateway.",
+          "configName": "gateway.port",
+          "type": "port",
+          "required": true,
+          "default": 8443
+        },
+        {
+          "name": "gateway_path",
+          "label": "Gateway path",
+          "description": "The default context path for the gateway.",
+          "configName": "gateway.path",
+          "type": "string",
+          "required": true,
+          "default": "gateway"
+        },
+        {
+          "name": "gateway_gateway_conf_dir",
+          "label": "Gateway config directory",
+          "description": "The directory within GATEWAY_HOME that contains gateway topology files and deployments.",
+          "configName": "gateway.gateway.conf.dir",
+          "type": "string",
+          "default": "deployments"
+        },
+        {
+          "name": "java_security_krb5_conf",
+          "label": "krb5.conf location",
+          "description": "Absolute path to krb5.conf file",
+          "configName": "java.security.krb5.conf",
+          "type": "string",
+          "default": "/etc/krb5.conf"
+        },
+        {
+          "name": "sun_security_krb5_debug",
+          "label": "KRB5 Debug",
+          "description": "Boolean flag indicating whether to enable debug messages for krb5 authentication",
+          "configName": "sun.security.krb5.debug",
+          "type": "boolean",
+          "default": "true"
+        },
+        {
+          "name": "gateway_websocket_feature_enabled",
+          "label": "Websockets enabled",
+          "description": "Enable/Disable websocket feature.",
+          "configName": "gateway.websocket.feature.enabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "gateway_scope_cookies_feature_enabled",
+          "label": "Cookie scoping enabled",
+          "description": "Enable/Disable cookie scoping feature.",
+          "configName": "gateway.scope.cookies.feature.enabled",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "gateway_knox_admin_groups",
+          "label": "Admin Groups",
+          "configName": "gateway.knox.admin.groups",
+          "description": "Admin groups for Knox",
+          "type": "string",
+          "default": "admin"
+        },
+        {
+          "name": "gateway_java_opts",
+          "label": "Additional Gateway Java Options",
+          "description": "These arguments are passed as part of the Java command line. Commonly, garbage collection flags or extra debugging flags are passed here.",
+          "type": "string",
+          "default": ""
+        }
+      ],
       "commands": [
         {
           "name": "GatewayCreateConfigDirectory",
