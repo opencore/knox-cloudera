@@ -120,6 +120,13 @@
       "description": "Admin groups for Knox",
       "type": "string",
       "default": "admin"
+    },
+    {
+      "name": "gateway_java_opts",
+      "label": "Additional Gateway Java Options",
+      "description": "These arguments are passed as part of the Java command line. Commonly, garbage collection flags or extra debugging flags are passed here.",
+      "type": "string",
+      "default": ""
     }
   ],
   "serviceInit": {
@@ -164,6 +171,7 @@
           "GATEWAY_SERVER_RUN_IN_FOREGROUND": "true",
           "GATEWAY_DATA_HOME": "${data_dir}",
           "GATEWAY_CONF_HOME": "${conf_dir}",
+          "GATEWAY_JAVA_OPTS": "${gateway_java_opts}",
           "KERBEROS_AUTH_ENABLED": "${gateway_hadoop_kerberos_secured}"
         }
       },
