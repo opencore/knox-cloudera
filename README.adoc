@@ -13,6 +13,12 @@ We only create a single physical file (with the suffix `-universal`) and symlink
 
 Note: This does not include the call to `make_manifest.py` which is needed to create the `manifest.json` file.
 
+You can use this Parcel and drop it in the `/opt/cloudera/parcel-cache` directory.
+For RedHat/CentOS you need to change the suffix to `-el7`.
+For a full list of suffixes check the https://github.com/cloudera/cm_ext/wiki/Parcel-distro-suffixes[cm-ext Github wiki].
+If you go this route you also need to create a `*.sha` file containing the SHA checksum.
+This can be calculated using `sha1sum`.
+
 We (http://www.opencore.com[OpenCore]) do not currently host a repository with pre-built Parcels but we might do so in the future.
 
 
@@ -20,6 +26,10 @@ We (http://www.opencore.com[OpenCore]) do not currently host a repository with p
 
 There is also a CSD to be able to manage Knox from within Cloudera Manager.
 It will start Knox but it will run with its default configuration.
+
+To build the CSD JAR file run the `build.sh` script in the `knox-csd` directory.
+Copy the resulting JAR file to `/opt/cloudera/csd` and restart Cloudera Manager.
+You also need to restart the _Cloudera Management Service_ once!
 
 To configure Knox you'll need to _manually_ change the topologies etc. in the data directory itself.
 The https://knox.apache.org/books/knox-1-1-0/user-guide.html[Knox User Guide] can help.
