@@ -16,6 +16,7 @@
     - "{{ OUTPUT_DIR }}"
     - "{{ WORK_DIR }}"
     - "{{ CACHE_DIR }}"
+    - "{{ MANIFEST_DIR }}"
 
 - name: Download distribution
   get_url:
@@ -51,6 +52,12 @@
     dest: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/bin/"
     mode: 0755
 
+- name: Copy manifest.py file
+  copy:
+    src: make_manifest.py
+    dest: "{{ MANIFEST_DIR }}/make_manifest.py"
+    mode: 0755
+
 - name: Copy modified gateway.sh script
   copy:
     src: gateway.sh
@@ -63,6 +70,12 @@
 - name: Original conf directory and its subdirectories need proper permissions
   file:
     path: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}/conf.org"
+    mode: u=rwX,g=rX,o=rX
+    recurse: yes
+
+- name: Original directories should be accessible by user knox
+  file:
+    path: "{{ WORK_DIR }}/{{ PARCEL_PREFIX }}"
     mode: u=rwX,g=rX,o=rX
     recurse: yes
 
@@ -79,18 +92,17 @@
 - name: Create parcel
   archive:
     path: "{{ WORK_DIR }}/"
-    dest: "{{ OUTPUT_DIR }}/{{ PARCEL_PREFIX }}-universal.parcel"
+    dest: "{{ OUTPUT_DIR }}/{{ PARCEL_PREFIX }}-el7.parcel"
 
-- name: Symlink parcel to architecture specific parcels
-  file:
-    src: "{{ PARCEL_PREFIX }}-universal.parcel"
-    path: "{{ OUTPUT_DIR }}/{{ PARCEL_PREFIX }}-{{ item }}.parcel"
-    state: link
-  with_items: "{{ TARGET_ARCHITECTURES }}"
+- name: Create manifest
+  shell: python {{ MANIFEST_DIR }}/make_manifest.py {{ OUTPUT_DIR }}
 
-- name: Empty working directory
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - "{{ WORK_DIR }}"
+- name: Create checksum file
+  shell: sha1sum  {{ OUTPUT_DIR }}/{{ PARCEL_PREFIX }}-el7.parcel > {{ OUTPUT_DIR }}/{{ PARCEL_PREFIX }}-el7.parcel.sha1
+
+#- name: Empty working directory
+#  file:
+#    path: "{{ item }}"
+#    state: absent
+#  with_items:
+#    - "{{ WORK_DIR }}"
