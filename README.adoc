@@ -1,6 +1,6 @@
 = Apache Knox Parcel & CSD
 
-This repository contains an Ansible playbook to create a Parcel for Apache Knox as well as the definitions needed to build a CSD.
+This repository contains an Ansible playbook to create a Parcel for Apache Knox 1.2 as well as the definitions needed to build a CSD.
 Both these things are needed if you want to integrate Knox into Cloudera Manager.
 
 == Parcel
@@ -9,17 +9,8 @@ To build the Parcel execute the `parcel.yml` playbook from the main directory us
 There is a script called `build-parcel.sh` that can be used to kick off the process.
 The finished parcel will be in the `work/output` directory.
 Cloudera Manager requires one Parcel per supported target distribution.
-We only create a single physical file (with the suffix `-universal`) and symlink the others.
 
-Note: This does not include the call to `make_manifest.py` which is needed to create the `manifest.json` file.
-
-You can use this Parcel and drop it in the `/opt/cloudera/parcel-cache` directory.
-For RedHat/CentOS you need to change the suffix to `-el7`.
-For a full list of suffixes check the https://github.com/cloudera/cm_ext/wiki/Parcel-distro-suffixes[cm-ext Github wiki].
-If you go this route you also need to create a `*.sha` file containing the SHA checksum.
-This can be calculated using `sha1sum`.
-
-We (http://www.opencore.com[OpenCore]) do not currently host a repository with pre-built Parcels but we might do so in the future.
+This only genereates a parcel for el7 distribution including the .sha1 and the manifest
 
 
 == CSD
@@ -32,7 +23,7 @@ Copy the resulting JAR file to `/opt/cloudera/csd` and restart Cloudera Manager.
 You also need to restart the _Cloudera Management Service_ once!
 
 To configure Knox you'll need to _manually_ change the topologies etc. in the data directory itself.
-The https://knox.apache.org/books/knox-1-1-0/user-guide.html[Knox User Guide] can help.
+The https://knox.apache.org/books/knox-1-2-0/user-guide.html[Knox User Guide] can help.
 
 You will also need to manually create Proxy Users in the various services that Knox should access.
 
