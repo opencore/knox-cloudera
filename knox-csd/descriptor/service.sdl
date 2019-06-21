@@ -221,7 +221,7 @@
           "requiredRoleState": "stopped",
           "commandRunner": {
             "program": "scripts/bootstrap_config.sh",
-            "args": ["${conf_dir}"]
+            "args": ["${conf_dir}", "${data_dir}"]
           }
         },
         {
