@@ -1,3 +1,3 @@
 #!/bin/bash
 
-jar -cvf KNOX-1.0.jar *
+jar -cvf KNOX-1.2.0.jar *
